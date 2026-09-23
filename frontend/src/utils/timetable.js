@@ -68,14 +68,21 @@ export function fmtFull(d) {
   return d.getFullYear() + '年' + fmtMonthDay(d)
 }
 
+/** 开学日所在日历周的周一（周次按自然周 周一~周日 锚定，开学日可为任意星期） */
+export function weekMondayOf(startDate) {
+  const offset = (startDate.getDay() + 6) % 7 // 周一=0 ... 周日=6
+  return addDays(startDate, -offset)
+}
+
 /** 第 week 周的周一 */
 export function mondayOf(startDate, week) {
-  return addDays(startDate, (week - 1) * 7)
+  return addDays(weekMondayOf(startDate), (week - 1) * 7)
 }
 
 /** 未开学=0，开学后按自然周计 */
 export function rawWeekOf(startDate, date) {
-  const days = Math.floor((new Date(date.getFullYear(), date.getMonth(), date.getDate()) - startDate) / DAY_MS)
+  const week1Mon = weekMondayOf(startDate)
+  const days = Math.floor((new Date(date.getFullYear(), date.getMonth(), date.getDate()) - week1Mon) / DAY_MS)
   return days < 0 ? 0 : Math.floor(days / 7) + 1
 }
 

@@ -4,7 +4,7 @@ import { useAppStore } from '@/stores/app'
 import {
   DAYS, SLOTS, paletteOf,
   parseDateStr, mondayOf, rawWeekOf, clampWeek, currentWeek,
-  fmtMonthDay, fmtFull, inWeek
+  fmtMonthDay, fmtFull, inWeek, addDays
 } from '@/utils/timetable'
 
 const props = defineProps({
@@ -31,12 +31,12 @@ watch([startDate, totalWeeks], () => {
 
 // ── 本周信息 ──
 const weekMon = computed(() => configured.value ? mondayOf(startDate.value, week.value) : null)
-const weekSun = computed(() => configured.value ? mondayOf(startDate.value, week.value + 1 - 1) : null)
+const weekSun = computed(() => configured.value ? addDays(weekMon.value, 6) : null)
 const rawWeek = computed(() => configured.value ? rawWeekOf(startDate.value, new Date()) : 0)
 const weekPill = computed(() => {
   if (!configured.value) return ''
   if (rawWeek.value === week.value) return '本周'
-  if (week.value >= examStartWeek.value) return '考试周'
+  if (examStartWeek.value > 0 && week.value >= examStartWeek.value) return '考试周'
   return ''
 })
 
@@ -44,10 +44,11 @@ const weekOptions = computed(() => {
   const opts = []
   for (let w = 1; w <= totalWeeks.value; w++) {
     const mon = mondayOf(startDate.value, w)
-    const sun = mondayOf(startDate.value, w + 1 - 1)
+    const sun = addDays(mon, 6)
+    const exam = examStartWeek.value > 0 && w >= examStartWeek.value
     opts.push({
       value: w,
-      label: `第${w}周 (${fmtMonthDay(mon)}-${fmtMonthDay(sun)})${w >= examStartWeek.value ? ' · 考试周' : ''}`
+      label: `第${w}周 (${fmtMonthDay(mon)}-${fmtMonthDay(sun)})${exam ? ' · 考试周' : ''}`
     })
   }
   return opts
@@ -87,7 +88,7 @@ const weekStat = computed(() => {
 
 // ── 表头日期与今天 ──
 function dayDate(i) {
-  return weekMon.value ? mondayOf(weekMon.value, i) : null
+  return weekMon.value ? addDays(weekMon.value, i) : null
 }
 function isToday(i) {
   if (!weekMon.value || rawWeek.value !== week.value) return false
