@@ -1,0 +1,72 @@
+# ============================================================
+# YiHong 个人成长作品集 — Docker Compose
+# 启动: docker-compose up -d
+# 停止: docker-compose down
+# ============================================================
+version: '3.8'
+
+services:
+  # MySQL 数据库
+  db:
+    image: mysql:8.0
+    container_name: growth-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-growth123}
+      MYSQL_DATABASE: growth
+      MYSQL_CHARSET: utf8mb4
+      MYSQL_COLLATION: utf8mb4_unicode_ci
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./backend/src/main/resources/sql/init.sql:/docker-entrypoint-initdb.d/01_init.sql
+      - ./backend/src/main/resources/sql/migrate_v2.sql:/docker-entrypoint-initdb.d/02_migrate_v2.sql
+      - ./backend/src/main/resources/sql/migrate_v3_certificates.sql:/docker-entrypoint-initdb.d/03_migrate_v3.sql
+      - ./backend/src/main/resources/sql/migrate_v4_source_sync.sql:/docker-entrypoint-initdb.d/04_migrate_v4.sql
+      - ./backend/src/main/resources/sql/migrate_v5_study_plans.sql:/docker-entrypoint-initdb.d/05_migrate_v5.sql
+      - ./backend/src/main/resources/sql/migrate_v6_timetable.sql:/docker-entrypoint-initdb.d/06_migrate_v6.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Spring Boot 后端
+  backend:
+    build: ./backend
+    container_name: growth-backend
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/growth?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_ROOT_PASSWORD:-growth123}
+      ADMIN_PASSWORD_HASH: ${ADMIN_PASSWORD_HASH}
+      ADMIN_TOKEN_SECRET: ${ADMIN_TOKEN_SECRET}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost}
+      GMAIL_USERNAME: ${GMAIL_USERNAME:-}
+      GMAIL_APP_PASSWORD: ${GMAIL_APP_PASSWORD:-}
+      CONTACT_RECEIVE_EMAIL: ${CONTACT_RECEIVE_EMAIL:-}
+      GITHUB_TOKEN: ${GITHUB_TOKEN:-}
+      CSDN_RSS_URL: ${CSDN_RSS_URL:-https://blog.csdn.net/Yihong1833100198/rss/list}
+    volumes:
+      - uploads_data:/app/uploads
+
+  # Vue 前端 (Nginx)
+  frontend:
+    build: ./frontend
+    container_name: growth-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
+
+volumes:
+  mysql_data:
+  uploads_data:

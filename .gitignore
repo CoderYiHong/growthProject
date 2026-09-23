@@ -1,0 +1,37 @@
+# ============================================================
+# YiHong. 个人成长作品集 — 根目录 .gitignore
+# ============================================================
+
+# 系统文件
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# IDE
+.idea/
+*.iml
+.vscode/
+*.swp
+*.swo
+
+# 临时文件
+*.tmp
+*.log
+
+# 本地环境变量与密钥（示例文件保留）
+.env
+.env.*
+!.env.example
+
+# 设计稿（太大，不放 git）
+UI.png
+
+# 之前 Codex 会话的文档产物（非项目源码，不入库）
+.codex_full_requirements/
+.codex_review/
+.codex_xlsx/
+.codex_xmind/
+outputs/
+
+# Claude Code 本地配置（含本机敏感信息）
+.claude/settings.local.json

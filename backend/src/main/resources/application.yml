@@ -1,0 +1,111 @@
+# ============================================================
+# YiHong 个人成长作品集 — 后端配置
+# ============================================================
+
+server:
+  port: 8080
+
+spring:
+  application:
+    name: growth-backend
+
+  # ---- 数据源配置（开发环境使用 H2，生产环境使用 MySQL） ----
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/growth?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&createDatabaseIfNotExist=true
+    username: root
+    password: 1234
+
+  # 仅在首次启动或手动执行时建表，生产环境建议改为 never
+  sql:
+    init:
+      mode: never
+
+  # ---- Jackson 时区 ----
+  jackson:
+    time-zone: Asia/Shanghai
+    date-format: yyyy-MM-dd HH:mm:ss
+
+  # ---- Gmail 邮件通知（联系表单） ----
+  # 账号和应用专用密码只通过环境变量提供，禁止提交到 Git
+  mail:
+    host: ${GMAIL_SMTP_HOST:smtp.gmail.com}
+    port: ${GMAIL_SMTP_PORT:587}
+    username: ${GMAIL_USERNAME:coderyihong@gmail.com}
+    password: ${GMAIL_APP_PASSWORD:}
+    protocol: smtp
+    test-connection: false
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          connectiontimeout: 10000
+          timeout: 10000
+          writetimeout: 10000
+
+  # ---- 文件上传 ----
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 20MB
+
+# ---- MyBatis-Plus ----
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+    # 开发环境打印 SQL，生产环境改为 org.apache.ibatis.logging.slf4j.Slf4jImpl
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+  global-config:
+    db-config:
+      id-type: auto
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+
+# ---- 管理后台配置 ----
+# 生产环境必须设置环境变量，否则启动失败
+admin:
+  username: ${ADMIN_USERNAME:admin}
+  # BCrypt Hash（$2a$...），勿填明文
+  password-hash: ${ADMIN_PASSWORD_HASH:}
+  # 至少 16 字符随机字符串
+  token-secret: ${ADMIN_TOKEN_SECRET:}
+  token-expire-hours: 24
+
+# ---- CORS 配置（仅允许明确的 http/https Origin） ----
+cors:
+  allowed-origins: ${CORS_ORIGINS:http://localhost:5173}
+
+# ---- 联系表单 ----
+contact:
+  # 可通过环境变量改为其他收件邮箱
+  receive-email: ${CONTACT_RECEIVE_EMAIL:coderyihong@gmail.com}
+
+# ---- CSDN 文章同步 ----
+csdn:
+  rss-url: ${CSDN_RSS_URL:https://blog.csdn.net/Yihong1833100198/rss/list}
+  author-name: ${CSDN_AUTHOR_NAME:YiHong}
+  sync-timeout-seconds: 20
+
+# ---- GitHub 项目同步 ----
+github:
+  username: ${GITHUB_USERNAME:CoderYiHong}
+  token: ${GITHUB_TOKEN:}
+  include-forks: ${GITHUB_INCLUDE_FORKS:false}
+  sync-timeout-seconds: 20
+
+# ---- SpringDoc OpenAPI ----
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /docs
+    tags-sorter: alpha
+    operations-sorter: alpha
+
+logging:
+  level:
+    com.yihong.growth.mapper: WARN

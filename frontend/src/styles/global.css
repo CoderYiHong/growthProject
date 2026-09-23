@@ -1,0 +1,434 @@
+/* ============================================
+   全局样式 - 个人成长作品集
+   ============================================ */
+
+@import './variables.css';
+@import './animations.css';
+
+/* 重置与基础 */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* 绿色半透膜 + 动漫底图，横向铺满整个窗口 */
+  background:
+    linear-gradient(rgba(247, 249, 246, 0.55), rgba(247, 249, 246, 0.55)),
+    url('/images/fufu.jpg') center / cover no-repeat fixed;
+  /* 确保 html 自身无任何宽度限制 */
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  color: var(--color-body);
+  line-height: 1.7;
+  min-height: 100vh;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+#app {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--color-primary-dark);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--color-title);
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+h1 { font-size: var(--font-size-5xl); }
+h2 { font-size: var(--font-size-3xl); }
+h3 { font-size: var(--font-size-xl); }
+h4 { font-size: var(--font-size-lg); }
+
+/* 容器 */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg);
+}
+
+.container-wide {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg);
+}
+
+/* 章节通用 */
+.section {
+  padding: var(--spacing-3xl) 0;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: var(--spacing-2xl);
+}
+
+.section-header h2 {
+  margin-bottom: var(--spacing-sm);
+  position: relative;
+  display: inline-block;
+}
+
+.section-header h2::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 48px;
+  height: 3px;
+  background: var(--color-primary);
+  border-radius: 2px;
+}
+
+.section-header p {
+  color: var(--color-secondary);
+  font-size: var(--font-size-md);
+  margin-top: var(--spacing-sm);
+}
+
+/* 按钮样式 */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 24px;
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-base);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  text-decoration: none;
+}
+
+.btn-primary:hover {
+  background: var(--color-primary-dark);
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 24px;
+  background: transparent;
+  color: var(--color-primary);
+  border: 1.5px solid var(--color-primary);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-base);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  text-decoration: none;
+}
+
+.btn-outline:hover {
+  background: var(--color-primary-light);
+  color: var(--color-primary-dark);
+  transform: translateY(-1px);
+}
+
+/* 标签 */
+.tag {
+  display: inline-block;
+  padding: 3px 10px;
+  font-size: var(--font-size-xs);
+  border-radius: 4px;
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  font-weight: 500;
+}
+
+.tag-sm {
+  padding: 2px 8px;
+  font-size: 11px;
+}
+
+/* 卡片 */
+.card {
+  background: rgba(255, 255, 255, 0.75);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-border-light);
+  transition: all var(--transition-normal);
+  backdrop-filter: blur(6px);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+/* 面包屑 */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--font-size-sm);
+  color: var(--color-secondary);
+  margin-bottom: var(--spacing-md);
+}
+
+.breadcrumb a {
+  color: var(--color-secondary);
+}
+
+.breadcrumb a:hover {
+  color: var(--color-primary);
+}
+
+.breadcrumb .separator {
+  color: var(--color-border);
+}
+
+/* 分页容器 */
+.pagination-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--spacing-2xl);
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+  :root {
+    --font-size-5xl: 32px;
+    --font-size-4xl: 28px;
+    --font-size-3xl: 24px;
+    --font-size-2xl: 20px;
+    --font-size-xl: 18px;
+  }
+
+  .container,
+  .container-wide {
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: 0 var(--spacing-md);
+  }
+
+  .section {
+    padding: var(--spacing-2xl) 0;
+  }
+}
+
+/* 页面过渡动画 */
+.page-enter-active,
+.page-leave-active {
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.page-enter-from {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.page-leave-to {
+  opacity: 0;
+  transform: translateY(-8px);
+}
+
+/* ============================================
+   滚动渐显动画系统 (Scroll Reveal)
+   配合 useScrollReveal composable 使用
+   ============================================ */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s var(--ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1)),
+              transform 0.7s var(--ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1));
+}
+
+.reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 方向变体 */
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-30px);
+  transition: opacity 0.7s var(--ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1)),
+              transform 0.7s var(--ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1));
+}
+
+.reveal-left.revealed {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.reveal-right {
+  opacity: 0;
+  transform: translateX(30px);
+  transition: opacity 0.7s var(--ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1)),
+              transform 0.7s var(--ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1));
+}
+
+.reveal-right.revealed {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.reveal-scale {
+  opacity: 0;
+  transform: scale(0.95);
+  transition: opacity 0.7s var(--ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1)),
+              transform 0.7s var(--ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1));
+}
+
+.reveal-scale.revealed {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* 交错子元素 — 配合 --item-index 使用 */
+.reveal-stagger > * {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s var(--ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1)),
+              transform 0.5s var(--ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1));
+  transition-delay: calc(var(--item-index, 0) * 100ms);
+}
+
+.reveal-stagger.revealed > * {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 无障碍 — 尊重用户偏好 */
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal-left,
+  .reveal-right,
+  .reveal-scale {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .reveal.revealed,
+  .reveal-left.revealed,
+  .reveal-right.revealed,
+  .reveal-scale.revealed {
+    opacity: 1;
+    transform: none;
+  }
+
+  .reveal-stagger > * {
+    opacity: 1;
+    transform: none;
+    transition: none;
+    transition-delay: 0s;
+  }
+
+  .reveal-stagger.revealed > * {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* 全局半透明穿透 — 让动漫背景在所有区域透出 */
+
+/* 所有页面根元素、布局、区域：完全透明 */
+#app,
+#app > *,
+[class*='-page'],
+[class*='-layout'],
+[class*='-section'],
+[class*='-main'],
+.hero-container,
+.hero-content,
+.resume-container,
+.about-resume-page {
+  background: transparent !important;
+}
+
+/* 卡片类元素：半透白 + 毛玻璃，保留可读性 */
+.card,
+.table-card,
+.stat-card,
+[class*='-card']:not(.card-title):not(.goal-card) {
+  background: rgba(255, 255, 255, 0.78) !important;
+  backdrop-filter: blur(8px);
+}
+
+/* 目标卡片特殊处理 */
+.goal-card {
+  background: rgba(247, 249, 246, 0.7) !important;
+}
+
+/* admin 表格 */
+.el-table {
+  background: rgba(255, 255, 255, 0.72) !important;
+  --el-table-bg-color: transparent;
+  --el-table-tr-bg-color: transparent;
+}
+.el-table th {
+  background: rgba(255, 255, 255, 0.6) !important;
+}
+
+/* 消息详情内容区 */
+.msg-content p,
+.msg-detail {
+  background: rgba(247, 249, 246, 0.6) !important;
+}
+
+/* 滚动条美化 */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-secondary);
+}

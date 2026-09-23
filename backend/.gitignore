@@ -1,0 +1,32 @@
+# ============================================================
+# YiHong. 后端 — Spring Boot
+# ============================================================
+
+# 构建产物
+target/
+*.class
+*.jar
+!mvnw/wrapper/maven-wrapper.jar
+
+# IDE
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Maven
+.mvn/wrapper/maven-wrapper.properties.bak
+
+# 日志
+*.log
+
+# 数据库文件
+data/
+*.db
+
+# 系统
+.DS_Store
+Thumbs.db
+
+# 临时
+*.tmp
